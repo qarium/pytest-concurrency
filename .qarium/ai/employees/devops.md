@@ -3,7 +3,7 @@
 | Key            | Value   | Description                                  |
 |----------------|---------|----------------------------------------------|
 | ci_provider    | github  | CI/CD platform                               |
-| trigger_branch | main    | Default branch for CI triggers and diff base |
+| trigger_branch | master  | Default branch for CI triggers and diff base |
 
 ## Rules
 
@@ -11,9 +11,9 @@
 
 | Workflow | File          | Trigger               | Purpose                                |
 |----------|---------------|-----------------------|----------------------------------------|
-| tests    | `tests.yml`   | push/PR to main       | Run pytest across Python 3.10-3.13    |
-| lint     | `lint.yml`    | push/PR to main       | Ruff lint and format check             |
-| docs     | `docs.yml`    | push/PR to main       | Build docs with mkdocs                 |
+| tests    | `tests.yml`   | push/PR to master    | Run pytest across Python 3.10-3.13    |
+| lint     | `lint.yml`    | push/PR to master    | Ruff lint and format check             |
+| docs     | `docs.yml`    | push/PR to master    | Build docs with mkdocs                 |
 | publish  | `publish.yml` | tags v*               | Build and publish package to PyPI      |
 
 ### Conventions

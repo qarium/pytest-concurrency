@@ -4,7 +4,7 @@
 
 | Key            | Value | Description                                  |
 |----------------|-------|----------------------------------------------|
-| default_branch | main  | Default branch for CI triggers and diff base |
+| default_branch | master | Default branch for CI triggers and diff base |
 
 ## Architecture & Decisions
 - **Thread-local monkey-patching for concurrency** — patches pytest internals (SetupState, FixtureDef) and os.environ to be thread-local, enabling parallel test execution without state collisions

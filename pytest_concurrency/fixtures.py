@@ -4,7 +4,7 @@ import typing as t
 from _pytest import fixtures
 
 # pylint: disable=invalid-name
-FixtureDef: t.Any = getattr(fixtures, 'FixtureDef')
+FixtureDef: t.Any = fixtures.FixtureDef
 
 
 @t.final
