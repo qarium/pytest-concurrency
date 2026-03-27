@@ -1,0 +1,43 @@
+name: Strictacode
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - uses: qarium/strictacode/.github/actions/analyze@v1
+        with:
+          install-cmd: pip install strictacode
+          working-directory: pytest_concurrency
+        env:
+          STRICTACODE_SCORE: "60"
+          STRICTACODE_RP: "70"
+          STRICTACODE_SCORE_DIFF: "10"
+          STRICTACODE_RP_DIFF: "5"
+          STRICTACODE_OP: "40"
+          STRICTACODE_IMB: "35"
+          STRICTACODE_DENSITY: "30"
+          STRICTACODE_OP_DIFF: "5"
+          STRICTACODE_DENSITY_DIFF: "3"
