@@ -24,5 +24,6 @@
 
 ## Lessons
 
-| Problem | Why | How to prevent |
-|---------|-----|----------------|
+| Problem                                      | Why                                      | How to prevent                                      |
+|----------------------------------------------|------------------------------------------|-----------------------------------------------------|
+| CI triggers used `main` instead of `master`  | lead.md had wrong `default_branch` value | Always verify with `git branch --show-current` before creating workflows |

@@ -2,8 +2,8 @@ import threading
 import typing as t
 
 from _pytest import runner
-from _pytest.main import Session
 from _pytest.nodes import Item
+from _pytest.main import Session
 
 
 @t.final
@@ -25,16 +25,16 @@ def _get_next_item(collection: list[t.Any], index: int) -> t.Optional[t.Any]:
 
 
 def _create_test_cases(items: list[Item]) -> t.Generator[tuple[t.Any, ...], None, None]:
-    test_cases: list[Item] = []
+    test_cases: t.List[Item] = []
 
     def item_unique_key(item: Item) -> str:
-        cls = item.cls
-        module = item.module
+        cls = getattr(item, 'cls')
+        module = getattr(item, 'module')
 
-        test_name = item.originalname
-        cls_name = cls.__name__ if cls else "Function"
+        test_name = getattr(item, 'originalname')
+        cls_name = cls.__name__ if cls else 'Function'
 
-        return f"{module.__name__}.{cls_name}.{test_name}"
+        return f'{module.__name__}.{cls_name}.{test_name}'
 
     def can_be_merged(item_one: Item, item_two: Item) -> bool:
         return item_unique_key(item_one) == item_unique_key(item_two)
@@ -66,7 +66,7 @@ def _create_test_cases(items: list[Item]) -> t.Generator[tuple[t.Any, ...], None
 def create_test_suites(session: Session, workers_count: int) -> list[list[tuple[Item, ...]]]:
     # nodeid uniquely identifies a test as file::class::function[params]
     session.items.sort(key=lambda i: i.nodeid)
-    test_suites: list[list] = [[] for _ in range(workers_count)]
+    test_suites: t.List[t.List] = [[] for _ in range(workers_count)]
 
     suite_index = 0
 
@@ -101,11 +101,6 @@ def run_test_suite(session: Session, test_suite: list[tuple[Item, ...]]) -> None
                 _run_item(session, item, next_item)
                 continue
 
-            next_item = (
-                test_case[item_index + 1]
-                if item_index + 1 < len(test_case)
-                else next(iter(next_collection))
-                if next_collection
-                else None
-            )
+            next_item = test_case[item_index + 1] if item_index + 1 < len(test_case) else \
+                next(iter(next_collection)) if next_collection else None
             _run_item(session, item, next_item)
