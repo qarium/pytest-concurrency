@@ -4,7 +4,8 @@ import typing as t
 from _pytest import fixtures
 
 # pylint: disable=invalid-name
-FixtureDef: t.Any = getattr(fixtures, 'FixtureDef')
+# noqa: B009 — intentional defensive access to pytest internal class
+FixtureDef: t.Any = getattr(fixtures, "FixtureDef")  # noqa: B009
 
 
 @t.final

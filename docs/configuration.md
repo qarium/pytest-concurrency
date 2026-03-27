@@ -1,73 +1,75 @@
 # Configuration
 
-This document describes the configuration options for pytest-concurrency.
+## Command-Line Options
 
-## Command Line Options
+### `--workers`
 
-### --workers
-
-Number of parallel worker threads
+Number of parallel workers for test execution.
 
 ```bash
 pytest --workers 4
+pytest --workers auto  # Uses CPU count
 ```
+
+**Default:** Plugin disabled (sequential execution)
 
 **Values:**
-- Integer (e.g., `4`) — Number of workers
-- `"auto"` — Use number of CPU cores
-- Not specified — Plugin disabled (sequential execution)
 
-### --worker-timeout
+| Value | Description |
+|-------|-------------|
+| `N` (int) | Run with exactly N workers |
+| `auto` | Auto-detect using `os.cpu_count()` |
 
-Timeout in seconds for worker threads
+### `--worker-timeout`
+
+Timeout in seconds for worker thread completion.
 
 ```bash
-pytest --worker-timeout 60
+pytest --workers 4 --worker-timeout 300
 ```
 
-**Default:** None (workers run indefinitely)
+**Default:** `None` (no timeout)
 
 ## Environment Variables
 
-### PYTEST_CONCURRENCY_WORKERS
+### `PYTEST_CONCURRENCY_WORKERS`
 
-Number of parallel workers
+Enable parallel execution and set worker count.
 
 ```bash
 export PYTEST_CONCURRENCY_WORKERS=4
-pytest
+pytest  # Runs with 4 workers
 ```
 
-**Values:**
-- Integer (e.g., `4`) — Number of workers
-- `"auto"` — Use number of CPU cores
-- `--worker-timeout` in CLI or `PYTEST_CONCURRENCY_WORKER_TIMEOUT` env var — timeout value
+**Values:** Same as `--workers` CLI option
 
-### PYTEST_CONCURRENCY_WORKER_TIMEOUT
+### `PYTEST_CONCURRENCY_WORKER_TIMEOUT`
 
-Timeout in seconds for worker threads
+Set worker timeout via environment.
 
 ```bash
-export PYTEST_CONCURRENCY_WORKER_TIMEOUT=60
-pytest
-```
-
-**Default:** None
-
-## pyproject.toml
-
-Add to your `pyproject.toml`:
-
-```toml
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-addopts = "-v --tb=short"
+export PYTEST_CONCURRENCY_WORKER_TIMEOUT=300
+pytest  # Workers timeout after 5 minutes
 ```
 
 ## Priority
 
-Configuration priority (highest to lowest)
+CLI options take precedence over environment variables:
 
-1. Command line options (`--workers`, `--worker-timeout`)
-2. Environment variables (`PYTEST_CONCURRENCY_WORKERS`, `PYTEST_CONCURRENCY_WORKER_TIMEOUT`)
-3. Default values
+1. `--workers` CLI option
+2. `PYTEST_CONCURRENCY_WORKERS` environment variable
+3. Plugin disabled (sequential execution)
+
+## Test Distribution
+
+Tests are distributed using **round-robin** algorithm:
+
+1. All tests are sorted by `nodeid`
+2. Parametrized tests with the same `module.class.function` are grouped together
+3. Groups are distributed across workers in round-robin fashion
+
+This ensures:
+
+- Balanced load across workers
+- Setup/teardown consistency for parametrized tests
+- Deterministic distribution (same tests always go to same worker)

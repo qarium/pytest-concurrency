@@ -1,29 +1,32 @@
+# DevOps Config
+
 ## Config
 
-| Key            | Value   | Description                                  |
-|----------------|---------|----------------------------------------------|
-| ci_provider    | github  | CI/CD platform                               |
-| trigger_branch | master  | Default branch for CI triggers and diff base |
+| Key            | Value          | Description                                  |
+|----------------|----------------|----------------------------------------------|
+| ci_provider    | github-actions | CI provider                                  |
+| trigger_branch | master         | Default branch for CI triggers and diff base |
+| diff_range     | HEAD~5         | Git diff range for auto-analysis in feature  |
 
 ## Rules
 
 ### Workflow Registry
 
-| Workflow | File          | Trigger               | Purpose                                |
-|----------|---------------|-----------------------|----------------------------------------|
-| tests    | `tests.yml`   | push/PR to master    | Run pytest across Python 3.10-3.13    |
-| lint     | `lint.yml`    | push/PR to master    | Ruff lint and format check             |
-| docs     | `docs.yml`    | push/PR to master    | Build docs with mkdocs                 |
-| publish  | `publish.yml` | tags v*               | Build and publish package to PyPI      |
+| Workflow | File                            | Trigger                     | Purpose             |
+|----------|--------------------------------|-----------------------------|---------------------|
+| tests    | `.github/workflows/tests.yml`   | push/PR to master            | pytest matrix        |
+| lint     | `.github/workflows/lint.yml`    | push/PR to master            | ruff check + format |
+| docs     | `.github/workflows/docs.yml`    | push to master               | mkdocs deploy        |
+| publish  | `.github/workflows/publish.yml` | tag v*                       | PyPI release         |
 
 ### Conventions
 
-- Python version in CI jobs: 3.12 (lint, docs, publish)
-- Test matrix covers all supported versions: 3.10, 3.11, 3.12, 3.13
-- Actions pinned to major version: @v4, @v5
+- Python versions in CI matrix sync with pyproject.toml `classifiers`
+- Lint uses `astral-sh/ruff-action` for ruff lint
+- Format check uses `ruff format --check pytest_concurrency/ tests/`
+- Tests use `pytest --tb=short` with matrix strategy
 
 ## Lessons
 
-| Problem                                      | Why                                      | How to prevent                                      |
-|----------------------------------------------|------------------------------------------|-----------------------------------------------------|
-| CI triggers used `main` instead of `master`  | lead.md had wrong `default_branch` value | Always verify with `git branch --show-current` before creating workflows |
+| Problem | Why | How to prevent |
+|---------|-----|----------------|

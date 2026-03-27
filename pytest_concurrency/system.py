@@ -2,26 +2,23 @@ import os
 import threading
 import typing as t
 
-PYTEST_CURRENT_TEST_ENV: t.Final = 'PYTEST_CURRENT_TEST'
+PYTEST_CURRENT_TEST_ENV: t.Final = "PYTEST_CURRENT_TEST"
 
 # pylint: disable=invalid-name
-Environ: t.Any = getattr(os, '_Environ')
+# noqa: B009 — accessing private os._Environ class for thread-local patching
+Environ: t.Any = getattr(os, "_Environ")  # noqa: B009
 
 
 class ThreadLocalEnviron(Environ):
     def __init__(self, env: Environ):
-        data = getattr(env, '_data')
+        data = env._data  # noqa: B009 — accessing private _data attribute
 
-        super().__init__(data,
-                         env.encodekey,
-                         env.decodekey,
-                         env.encodevalue,
-                         env.decodevalue)
+        super().__init__(data, env.encodekey, env.decodekey, env.encodevalue, env.decodevalue)
 
         self.putenv = os.putenv
         self.unsetenv = os.unsetenv
 
-        self.thread_store = getattr(env, 'thread_store', threading.local())
+        self.thread_store = getattr(env, "thread_store", threading.local())
 
     def __getitem__(self, key: str) -> str:
         if key == PYTEST_CURRENT_TEST_ENV:
@@ -62,9 +59,9 @@ class ThreadLocalEnviron(Environ):
     def __len__(self) -> int:
         return len(self.thread_store.__dict__) + len(self._data)
 
-    def copy(self) -> 'Environ':
+    def copy(self) -> "Environ":
         return self.__class__(self)
 
 
 def patch_os() -> None:
-    os.environ = ThreadLocalEnviron(os.environ)
+    os.environ = ThreadLocalEnviron(os.environ)  # noqa: B003 — intentional wrapping, not clearing

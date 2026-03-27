@@ -6,23 +6,27 @@
 |---------------|----------------------------|-------------------------------------|
 | build_cmd     | `mkdocs build`             | Build validation command            |
 | deploy_cmd    | `mkdocs gh-deploy --force` | Deploy command                      |
-| base_branch   | `main`                   | Base branch for git diff comparison |
+| examples_file | `docs/examples.md`         | File for usage examples             |
+| logo_url      | `https://avatars.githubusercontent.com/u/262344922?s=200&v=4` | Standard qarium logo |
+| base_branch   | `master`                   | Base branch for git diff comparison |
 
 ## Rules
 
 ### Mapping
 
-| Source path                        | Documentation files             |
-|-------------------------------------|---------------------------------|
-| `pytest_concurrency/__init__.py`      | `docs/api.md`, `docs/usage.md`    |
-| `pytest_concurrency/allure.py`        | `docs/usage.md`                 |
-| `pytest_concurrency/envvars.py`        | `docs/configuration.md`            |
-| `pytest_concurrency/fixtures.py`      | `docs/api.md`                    |
-| `pytest_concurrency/runner.py`        | `docs/api.md`, `docs/usage.md`    |
-| `pytest_concurrency/system.py`        | `docs/api.md`                    |
-| `pytest_concurrency/tools.py`        | `docs/api.md`                    |
+| Source path | Documentation files |
+|-------------|---------------------|
+| `pytest_concurrency/tools.py` | `docs/api-reference.md` (get_workers_count) |
+| `pytest_concurrency/__init__.py` | `docs/getting-started.md`, `docs/configuration.md` |
+| `pytest_concurrency/envvars.py` | `docs/configuration.md` (env vars section) |
 
 ### Conventions
+
+- Use `#` for page titles (H1)
+- Use `##` for major sections
+- Use `###` for subsections
+- Include code examples in Python and Bash blocks
+- Link to external docs with full URLs
 
 ## Lessons
 

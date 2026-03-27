@@ -2,42 +2,31 @@
 
 A pytest plugin for parallel test execution with configurable concurrency.
 
-## Overview
-
-pytest-concurrency enables you to run your tests in parallel using multiple worker threads.
-This can significantly reduce test execution time for test suites with many independent tests.
-
 ## Features
 
-- **Parallel test execution** — Run tests concurrently using multiple worker threads
-- **Configurable concurrency** — Control the number of parallel workers via CLI or environment variable
-- **Automatic load balancing** — Tests are distributed across workers using round-robin scheduling
-- **Allure integration** — Thread-safe reporting when using pytest-allure
-- **Gevent support** — Compatible with gevent for async test scenarios
-
-## Installation
-
-```bash
-pip install pytest-concurrency
-```
+- **Parallel test execution** — run tests concurrently using multiple workers
+- **Thread-safe pytest internals** — patches pytest's internal state for thread isolation
+- **Optional Allure integration** — works with allure-pytest when installed
+- **Auto-detection** — automatically use CPU count with `--workers auto`
+- **Round-robin distribution** — balanced test load across workers
 
 ## Quick Start
 
-Enable parallel test execution by adding the `--workers` option:
-
 ```bash
+# Install
+pip install pytest-concurrency
+
+# Run tests with 4 parallel workers
 pytest --workers 4
+
+# Auto-detect CPU cores
+pytest --workers auto
 ```
 
-Or set the environment variable
+## How It Works
 
-```bash
-export PYTEST_CONCURRENCY_WORKERS=4
-pytest
-```
+The plugin patches pytest internals (`SetupState`, `FixtureDef`, `os.environ`) to make them thread-local, enabling safe parallel execution. Tests are distributed across workers using a round-robin algorithm, with parametrized tests kept together to avoid setup/teardown conflicts.
 
-## Documentation
+## License
 
-- [Usage Guide](usage.md) — Detailed usage instructions and examples
-- [API Reference](api.md) — Public API documentation
-- [Configuration](configuration.md) — Configuration options and environment variables
+MIT

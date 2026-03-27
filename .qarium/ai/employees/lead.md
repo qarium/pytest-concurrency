@@ -2,28 +2,28 @@
 
 ## Config
 
-| Key            | Value | Description                                  |
-|----------------|-------|----------------------------------------------|
+| Key            | Value  | Description                                  |
+|----------------|--------|----------------------------------------------|
 | default_branch | master | Default branch for CI triggers and diff base |
 
 ## Architecture & Decisions
-- **Thread-local monkey-patching for concurrency** — patches pytest internals (SetupState, FixtureDef) and os.environ to be thread-local, enabling parallel test execution without state collisions
-- **Round-robin test distribution** — tests are sorted by nodeid and distributed across workers in round-robin fashion to balance load
-- **Test case merging by unique key** — parametrized tests with same module.class.function are grouped and executed together to maintain fixture sharing semantics
-- **Conditional plugin activation** — patches only apply when `--workers` flag or `PYTEST_CONCURRENCY_WORKERS` env var is present, avoiding overhead for normal pytest runs
-- **Optional allure integration** — allure patching is guarded by ImportError, providing thread-safe allure reporting when the package is installed
+- **Monkey patching pytest internals for thread-safety** — plugin modifies `_pytest.runner.SetupState`, `_pytest.fixtures.FixtureDef`, and `os._Environ` to make them thread-local, enabling parallel test execution
+- **threading.local inheritance pattern** — classes inherit from both `threading.local` and target class to achieve thread-isolated state without changing pytest's architecture
+- **Optional Allure integration via ImportError handling** — allure support is optional; if not installed, patch function becomes a no-op
+- **Round-robin test distribution** — tests are distributed across workers using round-robin algorithm for balanced load
+- **Test case merging by unique key** — parametrized tests with same module.class.function are kept together to avoid setup/teardown conflicts
 
 ## Project Structure
-- **Plugin entry in `__init__.py`** — pytest hooks (`pytest_addoption`, `pytest_configure`, `pytest_runtestloop`) defined at package root for entry point discovery
-- **Patching modules separated by concern** — `system.py` for os.environ, `fixtures.py` for FixtureDef, `allure.py` for allure — each patch is isolated for maintainability
-- **Constants in `envvars.py`** — environment variable names centralized for consistent reference
+- **Plugin entry point with conditional patching** — main module contains pytest hooks and applies patches only when plugin is enabled via CLI/env
+- **Patching logic separated by concern** — one module per subsystem (os environ, fixtures, runner, allure integration)
+- **Entry point via pytest11 hook** — standard pytest plugin discovery mechanism
 
 ## Code Patterns
-- **`typing as t` import convention** — consistent use of `import typing as t` with `t.Final`, `t.Any`, `t.Optional`, etc.
-- **`t.Final` for module constants** — all constants use `t.Final` type hint (e.g., `PYTEST_CONCURRENCY_WORKERS: t.Final`)
-- **`@t.final` decorator for classes** — classes not meant for inheritance use the final decorator
-- **Private helpers with underscore prefix** — internal functions like `_get_next_item`, `_run_item`, `_create_test_cases`
-- **Pylint disable comments inline** — `# pylint: disable=invalid-name` used where needed (e.g., accessing internal `_Environ`)
+- **@t.final decorator on thread-local classes** — prevents inheritance of classes designed for thread-local patching
+- **t.Final for constants** — module-level constants use typing.Final for clarity
+- **Intentional private attribute access with # noqa: B009** — accessing pytest/os internals requires pylint disable with explanatory comment
+- **Absolute imports with explicit module paths** — `from _pytest.config import Config` style for clarity
+- **Optional dependencies wrapped in try/except ImportError** — graceful degradation when optional packages (allure) are missing
 
 ## TODO
 <!-- empty -->
@@ -35,3 +35,4 @@
 
 | Problem | Why | How to prevent |
 |---------|-----|----------------|
+| `git symbolic-ref` returns stale branch name | Local `refs/remotes/origin/HEAD` symlink not updated after branch rename | Verify with `git remote show origin \| grep "HEAD branch"` or `git ls-remote --exit-code` |

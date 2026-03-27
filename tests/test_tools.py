@@ -39,9 +39,7 @@ class TestGetWorkersCount:
         assert result >= 1
         assert isinstance(result, int)
 
-    def test_auto_uses_default_when_cpu_count_is_none(
-        self, monkeypatch: pytest.MonkeyPatch
-    ) -> None:
+    def test_auto_uses_default_when_cpu_count_is_none(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Should use default value when os.cpu_count returns None."""
         config = Mock()
         config.getoption.return_value = "auto"
