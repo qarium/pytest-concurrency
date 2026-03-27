@@ -1,30 +1,40 @@
 site_name: pytest-concurrency
 site_description: A pytest plugin for parallel test execution with configurable concurrency
-
+site_url: https://qarium.github.io/pytest-concurrency/
 repo_url: https://github.com/qarium/pytest-concurrency
+edit_uri: edit/main/docs/
 
 theme:
   name: material
   palette:
-    primary: indigo
+    - scheme: default
+      primary: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - search.suggest
+    - search.highlight
+    - content.code.copy
 
 nav:
-  - index.md
-  - usage.md
-  - api.md
-  - configuration.md
+  - Home: index.md
+  - Usage: usage.md
+  - API: api.md
+  - Configuration: configuration.md
 
 plugins:
   - search
-  - mkdocstrings:
-      handlers: python
-      setup_commands:
-        - pip install mkdocs-material
-      watch:
-        - docs/
 
 markdown_extensions:
-  - pymdownx:
   - toc:
-    permalink: "＃"
-    toc_depth: 3
+      permalink: "#"
+      toc_depth: 3
+  - pymdownx.highlight
+  - pymdownx.superfences
