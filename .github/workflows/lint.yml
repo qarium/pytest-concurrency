@@ -3,10 +3,10 @@ name: Lint
 on:
   push:
     branches:
-      - master
+      - 0.0.x
   pull_request:
     branches:
-      - master
+      - 0.0.x
 
 jobs:
   lint:
@@ -15,6 +15,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - uses: astral-sh/ruff-action@v3
+        with:
+          args: check pytest_concurrency/ tests/
 
-      - name: Check formatting
-        run: ruff format --check pytest_concurrency/ tests/
+      - uses: astral-sh/ruff-action@v3
+        with:
+          args: format --check pytest_concurrency/ tests/

@@ -5,7 +5,7 @@
 | Key            | Value          | Description                                  |
 |----------------|----------------|----------------------------------------------|
 | ci_provider    | github-actions | CI provider                                  |
-| trigger_branch | master         | Default branch for CI triggers and diff base |
+| trigger_branch | 0.0.x          | Default branch for CI triggers and diff base |
 | diff_range     | HEAD~5         | Git diff range for auto-analysis in feature  |
 
 ## Rules
@@ -14,10 +14,11 @@
 
 | Workflow | File                            | Trigger                     | Purpose             |
 |----------|--------------------------------|-----------------------------|---------------------|
-| tests    | `.github/workflows/tests.yml`   | push/PR to master            | pytest matrix        |
-| lint     | `.github/workflows/lint.yml`    | push/PR to master            | ruff check + format |
-| docs     | `.github/workflows/docs.yml`    | push to master               | mkdocs deploy        |
-| publish  | `.github/workflows/publish.yml` | tag v*                       | PyPI release         |
+| tests    | `.github/workflows/tests.yml`   | push/PR to 0.0.x             | pytest matrix        |
+| lint     | `.github/workflows/lint.yml`    | push/PR to 0.0.x             | ruff check + format |
+| docs     | `.github/workflows/docs.yml`    | push to 0.0.x                | mkdocs deploy        |
+| publish  | `.github/workflows/publish.yml` | workflow_dispatch            | PyPI release         |
+| strictacode | `.github/workflows/strictacode.yml` | push/PR to 0.0.x    | strictacode analysis |
 
 ### Conventions
 
