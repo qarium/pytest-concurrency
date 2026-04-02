@@ -18,6 +18,7 @@
 | lint     | `.github/workflows/lint.yml`    | push/PR to 0.0.x             | ruff check + format |
 | docs     | `.github/workflows/docs.yml`    | push to 0.0.x                | mkdocs deploy        |
 | publish  | `.github/workflows/publish.yml` | workflow_dispatch            | PyPI release         |
+| new_version | `.github/workflows/new_version.yml` | workflow_dispatch          | Create version branch |
 | strictacode | `.github/workflows/strictacode.yml` | push/PR to 0.0.x    | strictacode analysis |
 
 ### Conventions
