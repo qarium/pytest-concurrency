@@ -27,7 +27,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - uses: qarium/strictacode/.github/actions/analyze@master
+      - uses: qarium/strictacode/.github/actions/analyze@v0.0.6
         with:
           install-cmd: pip install strictacode
           working-directory: pytest_concurrency
