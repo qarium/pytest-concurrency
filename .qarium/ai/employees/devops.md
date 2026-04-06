@@ -14,19 +14,19 @@
 
 | Workflow | File                            | Trigger                     | Purpose             |
 |----------|--------------------------------|-----------------------------|---------------------|
-| tests    | `.github/workflows/tests.yml`   | push/PR to 0.0.x             | pytest matrix        |
-| lint     | `.github/workflows/lint.yml`    | push/PR to 0.0.x             | ruff check + format |
-| docs     | `.github/workflows/docs.yml`    | push to 0.0.x                | mkdocs deploy        |
-| publish  | `.github/workflows/publish.yml` | workflow_dispatch            | PyPI release         |
-| new_version | `.github/workflows/new_version.yml` | workflow_dispatch          | Create version branch |
-| strictacode | `.github/workflows/strictacode.yml` | push/PR to 0.0.x    | strictacode analysis |
+| tests       | `.github/workflows/tests.yml`       | push/PR to 0.0.x  | pytest matrix (caller)        |
+| lint        | `.github/workflows/lint.yml`        | push/PR to 0.0.x  | ruff check + format           |
+| docs        | `.github/workflows/docs.yml`        | push to 0.0.x     | mkdocs deploy                 |
+| publish     | `.github/workflows/publish.yml`     | workflow_dispatch  | PyPI release (caller)         |
+| new_version | `.github/workflows/new_version.yml` | workflow_dispatch  | Create version branch (caller)|
+| strictacode | `.github/workflows/strictacode.yml` | push/PR to 0.0.x  | strictacode analysis          |
 
 ### Conventions
 
 - Python versions in CI matrix sync with pyproject.toml `classifiers`
 - Lint uses `astral-sh/ruff-action` for ruff lint
 - Format check uses `ruff format --check pytest_concurrency/ tests/`
-- Tests use `pytest --tb=short` with matrix strategy
+- Tests, publish, new_version are callers of `qarium/ci` reusable workflows
 
 ## Lessons
 
