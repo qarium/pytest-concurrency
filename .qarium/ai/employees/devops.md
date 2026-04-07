@@ -20,6 +20,7 @@
 | publish     | `.github/workflows/publish.yml`     | workflow_dispatch  | PyPI release (caller)         |
 | new_version | `.github/workflows/new_version.yml` | workflow_dispatch  | Create version branch (caller)|
 | strictacode | `.github/workflows/strictacode.yml` | push/PR to 0.0.x  | strictacode analysis          |
+| notify      | `.github/workflows/notify.yml`      | workflow_run: Publish Release | Telegram notify on release (caller) |
 
 ### Conventions
 
