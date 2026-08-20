@@ -4,7 +4,7 @@ site_name: pytest-concurrency
 site_description: A pytest plugin for parallel test execution with configurable concurrency
 site_url: https://qarium.github.io/pytest-concurrency/
 repo_url: https://github.com/qarium/pytest-concurrency
-edit_uri: edit/0.0.x/docs/
+edit_uri: edit/1.0.x/docs/
 
 theme:
   name: material
