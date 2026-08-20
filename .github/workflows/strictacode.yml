@@ -3,10 +3,10 @@ name: Strictacode
 on:
   push:
     branches:
-      - 0.0.x
+      - '[0-9]+.[0-9]+.x'
   pull_request:
     branches:
-      - 0.0.x
+      - '[0-9]+.[0-9]+.x'
 
 jobs:
   analyze:
@@ -32,12 +32,12 @@ jobs:
           install-cmd: pip install strictacode
           working-directory: pytest_concurrency
         env:
-          STRICTACODE_SCORE: "60"
-          STRICTACODE_RP: "70"
-          STRICTACODE_SCORE_DIFF: "10"
-          STRICTACODE_RP_DIFF: "5"
-          STRICTACODE_OP: "40"
-          STRICTACODE_IMB: "35"
-          STRICTACODE_DENSITY: "30"
-          STRICTACODE_OP_DIFF: "5"
-          STRICTACODE_DENSITY_DIFF: "3"
+          STRICTACODE_SCORE: 40
+          STRICTACODE_RP: 40
+          STRICTACODE_SCORE_DIFF: 3
+          STRICTACODE_RP_DIFF: 5
+          STRICTACODE_OP: 40
+          STRICTACODE_IMB: 35
+          STRICTACODE_DENSITY: 30
+          STRICTACODE_OP_DIFF: 5
+          STRICTACODE_DENSITY_DIFF: 3
