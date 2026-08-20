@@ -2,6 +2,9 @@
 
 ## Command-Line Options
 
+!!! note "Plugin activation"
+    The plugin enables parallel execution only when `--workers` is passed on the command line or `PYTEST_CONCURRENCY_WORKERS` is set in the environment. Passing `--worker-timeout` (or setting `PYTEST_CONCURRENCY_WORKER_TIMEOUT`) alone does **not** activate the plugin — tests run sequentially.
+
 ### `--workers`
 
 Number of parallel workers for test execution.
@@ -22,13 +25,13 @@ pytest --workers auto  # Uses CPU count
 
 ### `--worker-timeout`
 
-Timeout in seconds for worker thread completion.
+Timeout in seconds for how long the main thread waits for each worker thread to finish. Once the timeout elapses, the plugin stops waiting — the test run is **not** marked as failed, and tests still running in that worker may not report results.
 
 ```bash
 pytest --workers 4 --worker-timeout 300
 ```
 
-**Default:** `None` (no timeout)
+**Default:** `None` (wait indefinitely)
 
 ## Environment Variables
 

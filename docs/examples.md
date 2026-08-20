@@ -25,9 +25,11 @@ pytest
 ## With Timeout
 
 ```bash
-# Fail if workers don't complete in 5 minutes
+# Stop waiting for workers if they don't finish within 5 minutes
 pytest --workers 4 --worker-timeout 300
 ```
+
+After the timeout elapses, the plugin stops waiting for worker threads — the test run itself is **not** marked as failed, and tests still running in those workers may not report results.
 
 ## CI/CD Integration
 
@@ -35,9 +37,9 @@ pytest --workers 4 --worker-timeout 300
 
 ```yaml
 - name: Run tests
-  run: pytest --workers auto --worker-timeout 600
+  run: pytest --worker-timeout 600
   env:
-    PYTEST_CONCURRENCY_WORKERS: ${{ vars.PARALLEL_WORKERS }}
+    PYTEST_CONCURRENCY_WORKERS: ${{ vars.PARALLEL_WORKERS || 'auto' }}
 ```
 
 ### GitLab CI
@@ -65,9 +67,8 @@ pip install allure-pytest pytest-concurrency
 pytest --workers 4 --alluredir=allure-results
 ```
 
-::: note
-pytest-concurrency automatically patches Allure classes for thread-safety when `allure-pytest` is installed.
-:::
+!!! note
+    pytest-concurrency automatically patches Allure classes for thread-safety when `allure-pytest` is installed.
 
 ## Thread-Safe Test Patterns
 

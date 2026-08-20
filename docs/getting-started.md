@@ -40,6 +40,7 @@ When `--workers` is provided or `PYTEST_CONCURRENCY_WORKERS` is set, the plugin:
 
 - Python 3.10+
 - pytest 7.0+
+- `gevent` and `pytest-gevent` (required, installed automatically with the plugin)
 - Optional: `allure-pytest` for Allure integration
 
 ## Limitations

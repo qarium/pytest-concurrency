@@ -58,7 +58,8 @@ Custom test execution loop that:
 
 ## Patching Functions
 
-::: pytest-concurrency patches internal pytest classes at module level when the plugin is enabled. Do not call these directly. :::
+!!! warning "Internal"
+    pytest-concurrency patches internal pytest classes at module level when the plugin is enabled. Do not call these directly.
 
 | Function | Module | Purpose |
 |----------|--------|---------|

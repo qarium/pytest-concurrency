@@ -1,0 +1,11 @@
+# MkDocs traceability: documentation page -> cell directories.
+#
+# Rules:
+#   1. Entries MUST reference cell directory paths (e.g. `auth/data`), never files.
+#   2. Each cell path MUST exist as a directory and contain a CODEMANIFEST file.
+#   3. A page is linked to a cell if it uses information from that cell's
+#      CODEMANIFEST or .usages/ files.
+#
+# Status: no cells exist in this repository yet — no entries.
+# Re-run the goga-tool-mkdocs pipeline after bootstrapping cells (goga-brainstorm)
+# to populate this mapping.
